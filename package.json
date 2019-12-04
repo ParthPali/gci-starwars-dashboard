@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
-    "client": "npm start --prefix gci-starwars-dashboard",
+    "gci-starwars-dashboard": "npm start --prefix gci-starwars-dashboard",
     "dev": "concurrently \"npm run server\" \"npm run gci-starwars-dashboard \""
   },
 
