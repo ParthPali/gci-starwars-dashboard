@@ -9,20 +9,21 @@
     "gci-starwars-dashboard": "npm start --prefix gci-starwars-dashboard",
     "dev": "concurrently \"npm run server\" \"npm run gci-starwars-dashboard \""
   },
-
   "dependencies": {
+    "@material-ui/core": "^4.7.1",
     "apollo-boost": "^0.4.4",
     "apollo-datasource-rest": "^0.6.9",
     "apollo-server": "^2.9.12",
     "apollo-server-express": "^2.9.12",
     "concurrently": "^5.0.0",
     "graphql": "^14.5.8",
-    "qs-middleware": "^1.0.3"
+    "qs-middleware": "^1.0.3",
+    "react-apollo": "^3.1.3",
+    "react-router": "^5.1.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.1"
   },
-
   "repository": {
     "type": "git",
     "url": "git+https://github.com/sayamss/gci-starwars-dashboard.git"
