@@ -1,0 +1,36 @@
+{
+  "name": "starswars-dashboard",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "server": "nodemon server.js",
+    "client": "npm start --prefix gci-starwars-dashboard",
+    "dev": "concurrently \"npm run server\" \"npm run gci-starwars-dashboard \""
+  },
+
+  "dependencies": {
+    "apollo-boost": "^0.4.4",
+    "apollo-datasource-rest": "^0.6.9",
+    "apollo-server": "^2.9.12",
+    "apollo-server-express": "^2.9.12",
+    "concurrently": "^5.0.0",
+    "graphql": "^14.5.8",
+    "qs-middleware": "^1.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.1"
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sayamss/gci-starwars-dashboard.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/sayamss/gci-starwars-dashboard/issues"
+  },
+  "homepage": "https://github.com/sayamss/gci-starwars-dashboard#readme"
+}
