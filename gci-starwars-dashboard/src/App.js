@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react'
 import logo from './logo.svg';
 import './App.css';
 import ApolloClient from 'apollo-boost';
@@ -8,28 +8,45 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Home from './components/Home.js';
 import People from './components/People';
 import NavBar from './components/navbar';
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
 });
 
+const styles = theme=> ({ 
+  root: {
+    backgroundColor: 'white',
+  }
+})
 
-function App() {
-  return (
-    <ApolloProvider client={client}>
+export class App extends Component {
+  render() {
+    let { classes } = this.props;
 
-      <Router>
-        <NavBar />
-        <Switch>
+    return (
+      <ApolloProvider client={client}>
 
-          <Route exact path="/" component={Home} />
-          <Route exact path="/people" />
+        <Router>
+        <div className={classes.root}>
+          <NavBar />
+          <Switch>
 
-        </Switch>
-      </Router>
-      
-    </ApolloProvider>
-  );
+            <Route exact path="/" component={Home} />
+            <Route exact path="/people" />
+
+          </Switch>
+          </div>
+        </Router>
+        
+      </ApolloProvider>
+    );
+  }
 }
 
-export default App;
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(App);

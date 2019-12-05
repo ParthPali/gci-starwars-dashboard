@@ -10,11 +10,6 @@ class RequestApi extends RESTDataSource{
         super();
         this.baseURL = 'https://swapi.co/api/';
     }
-
-    async getEveryPerson(){
-        const { results } = await this.get(`people/?page=1`);
-        return results;
-    }
     
     async getThing(url){
         return this.get(url);
@@ -129,6 +124,9 @@ const typeDefs = gql`
         name: String!
         birth_year: String
         gender: String
+        mass: Int
+        eye_color: String
+        skin_color: String
         films: [Film]
         starships: [StarShip]
         vehicles: [Vehicle]
