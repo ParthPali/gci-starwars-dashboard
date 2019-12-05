@@ -3,8 +3,11 @@ import logo from './logo.svg';
 import './App.css';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
-import { Router, Route, Switch } from "react-router";
+import { Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router } from 'react-router-dom';
 import Home from './components/Home.js';
+import People from './components/People';
+import NavBar from './components/navbar';
 
 const client = new ApolloClient({
   uri: 'http://localhost:4000/graphql',
@@ -14,9 +17,17 @@ const client = new ApolloClient({
 function App() {
   return (
     <ApolloProvider client={client}>
-      <div className="App">
-        <Home />
-      </div>
+
+      <Router>
+        
+        <Switch>
+
+          <Route exact path="/" component={Home} />
+          <Route exact path="/people" component={People} />
+
+        </Switch>
+      </Router>
+      
     </ApolloProvider>
   );
 }

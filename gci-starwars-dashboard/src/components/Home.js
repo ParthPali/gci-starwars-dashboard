@@ -4,12 +4,16 @@ import { Query } from 'react-apollo';
 
 const all = gql`
     query{
-        getPerson(id: 1){
-            name
-            films{
-                title
-            }
+        
+        getFilm(id: 1){
+            title
+            
         }
+        getEveryPerson{
+            count
+        }
+
+        
     }
 `;
 export class Home extends Component {
@@ -23,7 +27,7 @@ export class Home extends Component {
                             if(error) console.log(error)
                             console.log(data)
 
-                            return <h1>{data.getPerson.films[0].title}</h1>
+                            return <h1></h1>
                         }
                     }
                 </Query>

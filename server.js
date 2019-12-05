@@ -11,6 +11,9 @@ class RequestApi extends RESTDataSource{
         this.baseURL = 'https://swapi.co/api/';
     }
 
+    async getEveryPerson(){
+        return this.get('people/?page=1');
+    }
     
     async getThing(url){
         return this.get(url);
@@ -22,6 +25,7 @@ class RequestApi extends RESTDataSource{
 
     async getFilm(id){
         return this.get(`films/${id}`);
+        
     }
     async getPlanet(id){
         return this.get(`planets/${id}`);
@@ -32,16 +36,16 @@ class RequestApi extends RESTDataSource{
     async getStarShip(id){
         return this.get(`starships/${id}`);
     }
+
     
-
-
 }
 
-const getAllFilms = parent =>{
-    const promises = parent.films.map(async url =>{
+const getAllPersonE = parent =>{
+    const promises = parent.results.map(async url =>{
         const response = await fetch(url);
         return response.json();
     })
+
     return Promise.all(promises);
 }
 
@@ -99,12 +103,23 @@ const getALlVehicle = parent =>{
     return Promise.all(promises);
 }
 
+const getAllFilms = parent =>{
+    const promises = parent.films.map(async url =>{
+        const response = await fetch(url);
+        return response.json();
+    })
 
-
-
+    return Promise.all(promises);
+}
 
 const typeDefs = gql`
 
+    type AllPerson{
+        count: Int
+        next: String 
+        previous: String
+        results: [Person]
+    }
     type Film{
         title: String!
         characters: [Person]
@@ -164,7 +179,9 @@ const typeDefs = gql`
         films: [Film]
         pilots: [Person]
     }
+
     type Query{
+        getEveryPerson: AllPerson
         getFilm(id: Int!): Film
         getPerson(id: Int!): Person
         getVehicle(id: Int!): Vehicle
@@ -175,6 +192,9 @@ const typeDefs = gql`
 `;
 
 const resolvers = {
+    AllPerson:{
+        results: getAllPersonE
+    },
     Person: {
         films: getAllFilms,
         starships: getALlStarship,
@@ -203,7 +223,12 @@ const resolvers = {
     },
 
     Query:{
+
+        getEveryPerson: async(_,{dataSources}) =>{
+            return dataSources.requestApi.getEveryPerson();
+        },
         getFilm: async(_,{id}, {dataSources}) =>{
+            
             return dataSources.requestApi.getFilm(id);
         },
         getPerson: async(_,{id}, {dataSources}) =>{
