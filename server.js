@@ -12,7 +12,8 @@ class RequestApi extends RESTDataSource{
     }
 
     async getEveryPerson(){
-        return this.get('people/?page=1');
+        const { results } = await this.get(`people/?page=1`);
+        return results;
     }
     
     async getThing(url){
@@ -38,15 +39,6 @@ class RequestApi extends RESTDataSource{
     }
 
     
-}
-
-const getAllPersonE = parent =>{
-    const promises = parent.results.map(async url =>{
-        const response = await fetch(url);
-        return response.json();
-    })
-
-    return Promise.all(promises);
 }
 
 const getAllPerson = parent =>{
@@ -181,7 +173,7 @@ const typeDefs = gql`
     }
 
     type Query{
-        getEveryPerson: AllPerson
+        getEveryPerson(page: Int!): AllPerson
         getFilm(id: Int!): Film
         getPerson(id: Int!): Person
         getVehicle(id: Int!): Vehicle
@@ -192,9 +184,7 @@ const typeDefs = gql`
 `;
 
 const resolvers = {
-    AllPerson:{
-        results: getAllPersonE
-    },
+
     Person: {
         films: getAllFilms,
         starships: getALlStarship,
@@ -224,9 +214,13 @@ const resolvers = {
 
     Query:{
 
-        getEveryPerson: async(_,{dataSources}) =>{
-            return dataSources.requestApi.getEveryPerson();
+
+        getEveryPerson: async(_,{page},) => {
+            const response = await fetch(`https://swapi.co/api/people/?page=${page}`);
+            const data = await response.json();
+            return data;
         },
+
         getFilm: async(_,{id}, {dataSources}) =>{
             
             return dataSources.requestApi.getFilm(id);

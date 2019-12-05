@@ -5,12 +5,14 @@ import { Query } from 'react-apollo';
 const all = gql`
     query{
         
-        getFilm(id: 1){
-            title
-            
-        }
-        getEveryPerson{
+        getEveryPerson(page: 2){
             count
+            next
+            results{
+                name
+                gender
+
+            }
         }
 
         

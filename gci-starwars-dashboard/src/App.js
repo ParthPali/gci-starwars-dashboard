@@ -19,11 +19,11 @@ function App() {
     <ApolloProvider client={client}>
 
       <Router>
-        
+        <NavBar />
         <Switch>
 
           <Route exact path="/" component={Home} />
-          <Route exact path="/people" component={People} />
+          <Route exact path="/people" />
 
         </Switch>
       </Router>
