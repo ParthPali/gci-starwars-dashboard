@@ -44,7 +44,14 @@ const getAllPerson = parent =>{
 
     return Promise.all(promises);
 }
+const getAllPerson3 = parent =>{
+    const promises = parent.pilots.map(async url =>{
+        const response = await fetch(url);
+        return response.json();
+    })
 
+    return Promise.all(promises);
+}
 const getAllPerson2 = parent =>{
     const promises = parent.residents.map(async url =>{
         const response = await fetch(url);
@@ -54,8 +61,8 @@ const getAllPerson2 = parent =>{
     return Promise.all(promises);
 }
 
-const getAllPerson3 = parent =>{
-    const promises = parent.pilots.map(async url =>{
+const getAllPeople = parent =>{
+    const promises = parent.people.map(async url =>{
         const response = await fetch(url);
         return response.json();
     })
@@ -107,8 +114,29 @@ const typeDefs = gql`
         previous: String
         results: [Person]
     }
+    type AllFilm{
+        count: Int
+        results:[Film]
+    }
+    type AllPlanet{
+        count: Int
+        results: [Planet]
+    }
+    type AllVehicle{
+        count: Int
+        results: [Vehicle]
+    }
+    type AllStarShip{
+        count: Int
+        results: [StarShip]
+    }
+    type AllSpecies{
+        count: Int
+        results: [Species]
+    }
     type Film{
         title: String!
+        director: String!
         characters: [Person]
         created: String!
         episode_id: Int!
@@ -140,6 +168,8 @@ const typeDefs = gql`
         edited: String,
         films: [Film]
         residents: [Person]
+        population: Int
+        gravity: String
     }
 
     type Vehicle{
@@ -169,9 +199,24 @@ const typeDefs = gql`
         films: [Film]
         pilots: [Person]
     }
+    type Species{
+        name: String!
+        classification: String
+        average_height: Int
+        homeworld: Planet
+        language: String
+        people: [Person]
+        films: [Film]
+
+    }
 
     type Query{
         getEveryPerson(page: Int!): AllPerson
+        getEveryFilm: AllFilm
+        getEveryPlanet(page: Int!): AllPlanet
+        getEveryVehicle(page: Int!): AllVehicle
+        getEveryStarShip(page: Int!): AllStarShip
+        getEverySpecies(page: Int!): AllSpecies
         getFilm(id: Int!): Film
         getPerson(id: Int!): Person
         getVehicle(id: Int!): Vehicle
@@ -197,7 +242,7 @@ const resolvers = {
     },
     StarShip:{
         films: getAllFilms,
-        pilots: getAllPerson,
+        pilots: getAllPerson3
 
     },
     Vehicle:{
@@ -209,12 +254,46 @@ const resolvers = {
         films: getAllFilms,
         residents: getAllPerson2
     },
+    Species:{
+        films: getAllFilms,
+        people: getAllPeople
+    },
 
     Query:{
 
 
         getEveryPerson: async(_,{page},) => {
             const response = await fetch(`https://swapi.co/api/people/?page=${page}`);
+            const data = await response.json();
+            return data;
+        },
+
+        getEveryFilm: async(_,) => {
+            const response = await fetch(`https://swapi.co/api/films/`);
+            const data = await response.json();
+            return data;
+        },
+
+        getEveryPlanet: async(_,{page},) => {
+            const response = await fetch(`https://swapi.co/api/planets/?page=${page}`);
+            const data = await response.json();
+            return data;
+        },
+
+        getEveryVehicle: async(_,{page},) => {
+            const response = await fetch(`https://swapi.co/api/vehicles/?page=${page}`);
+            const data = await response.json();
+            return data;
+        },
+
+        getEveryStarShip: async(_,{page},) => {
+            const response = await fetch(`https://swapi.co/api/starships/?page=${page}`);
+            const data = await response.json();
+            return data;
+        },
+
+        getEverySpecies: async(_,{page},) => {
+            const response = await fetch(`https://swapi.co/api/species/?page=${page}`);
             const data = await response.json();
             return data;
         },

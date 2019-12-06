@@ -26,6 +26,17 @@ const styles = theme=> ({
 
 
 export class Person extends Component {
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+
+            person: null
+            
+        }
+    }
+
+    
     render() {
 
         let { classes } = this.props;
@@ -33,49 +44,62 @@ export class Person extends Component {
         return (
             <div>
             <Grid container>
+            
+            {(() => {
+                if (this.props.people == null) {
+                return (
+                    <h1>Loading</h1>
+                )
+            
+                } else {
+                return (
+                    this.props.people.map(person => (
 
-            {this.props.people.map(person => (
-
-            <Grid item sm={2}>
-                <Card className={classes.card}>
-                    <CardActionArea>
-                        <CardContent>
-                            <Typography gutterBottom variant="h5" component="h2" className={classes.name}>
-                                {person.name}
-                            </Typography>
-                                              
-                            <List style={{color: 'white'}}>
-  
-                                    <ListItem>
-                                        <ListItemText>Birth Year: {person.birth_year}</ListItemText>
-                                    </ListItem>
-
-                                    <ListItem>
-                                        <ListItemText>Gender: {person.gender}</ListItemText>
-                                    </ListItem>
-
-                                    <ListItem>
-                                        <ListItemText>Eye Color: {person.eye_color}</ListItemText>
-                                    </ListItem>
-
-                                    <ListItem>
-                                        <ListItemText>Skin Color: {person.skin_color}</ListItemText>
-                                    </ListItem>
-
-                                    <CardActions>
-                                        <Button size="small" style={{color: '#FFE81F'}}>
-                                        Know More
-                                        </Button>
-                                    </CardActions>
-
-                            </List>
-                        </CardContent>
-                    </CardActionArea>
-                        
-                        
-                </Card>
-            </Grid>
-            ))}
+                        <Grid item sm={2}>
+                            <Card className={classes.card}>
+                                <CardActionArea>
+                                    <CardContent>
+                                        <Typography gutterBottom variant="h5" component="h2" className={classes.name}>
+                                            {person.name}
+                                        </Typography>
+                                                          
+                                        <List style={{color: 'white'}}>
+              
+                                                <ListItem>
+                                                    <ListItemText>Birth Year: {person.birth_year}</ListItemText>
+                                                </ListItem>
+            
+                                                <ListItem>
+                                                    <ListItemText>Gender: {person.gender}</ListItemText>
+                                                </ListItem>
+            
+                                                <ListItem>
+                                                    <ListItemText>Eye Color: {person.eye_color}</ListItemText>
+                                                </ListItem>
+            
+                                                <ListItem>
+                                                    <ListItemText>Skin Color: {person.skin_color}</ListItemText>
+                                                </ListItem>
+            
+                                                <CardActions>
+                                                    <Button size="small" style={{color: '#FFE81F'}}>
+                                                    Know More
+                                                    </Button>
+                                                </CardActions>
+            
+                                        </List>
+                                    </CardContent>
+                                </CardActionArea>
+                                    
+                                    
+                            </Card>
+                        </Grid>
+                        ))
+                )
+                }
+            })()}
+            
+            
             </Grid>
             </div>
         )

@@ -11,9 +11,7 @@ import NavBar from './components/navbar';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-const client = new ApolloClient({
-  uri: 'http://localhost:4000/graphql',
-});
+
 
 const styles = theme=> ({ 
   root: {
@@ -26,7 +24,7 @@ export class App extends Component {
     let { classes } = this.props;
 
     return (
-      <ApolloProvider client={client}>
+      
 
         <Router>
         <div className={classes.root}>
@@ -40,7 +38,7 @@ export class App extends Component {
           </div>
         </Router>
         
-      </ApolloProvider>
+      
     );
   }
 }
