@@ -77,8 +77,8 @@ export class Vehicle extends Component {
                             <TableCell className={classes.thead} align="right">Crew</TableCell>
                             <TableCell className={classes.thead} align="right">Passengers</TableCell>
                             <TableCell className={classes.thead} align="right">Cost</TableCell>
-                            <TableCell className={classes.thead} align="right">Created</TableCell>
-                            <TableCell className={classes.thead} align="right">More Details</TableCell>
+                            <TableCell className={classes.thead} align="right">Cargo Capacity</TableCell>
+                            
                         </TableRow>
                     </TableHead>
 
@@ -98,8 +98,8 @@ export class Vehicle extends Component {
                                         <TableCell className={classes.tcell} align="right">{vehicle.crew}</TableCell>
                                         <TableCell className={classes.tcell} align="right">{vehicle.passengers}</TableCell>
                                         <TableCell className={classes.tcell} align="right">{vehicle.cost_in_credits}</TableCell>
-                                        <TableCell className={classes.tcell} align="right">{vehicle.created}</TableCell>
-                                        <TableCell className={classes.tcell} align="right"><Button>Know More</Button></TableCell>
+                                        <TableCell className={classes.tcell} align="right">{vehicle.cargo_capacity}</TableCell>
+                                        
                                     </TableRow>
                                     ))
                                     )

@@ -77,12 +77,12 @@ export class StarShip extends Component {
                         <TableCell className={classes.thead} align="right">Crew</TableCell>
                         <TableCell className={classes.thead} align="right">Passengers</TableCell>
                         <TableCell className={classes.thead} align="right">Cost</TableCell>
-                        <TableCell className={classes.thead} align="right">Created</TableCell>
+                
                         <TableCell className={classes.thead} align="right">MGLT</TableCell>
                         <TableCell className={classes.thead} align="right">Hyperdrive Rating</TableCell>
                         <TableCell className={classes.thead} align="right">Cargo Capacity</TableCell>
                         <TableCell className={classes.thead} align="right">Manufacturer</TableCell>
-                        <TableCell className={classes.thead} align="right">More Details</TableCell>
+                        
                     </TableRow>
                 </TableHead>
 
@@ -102,12 +102,12 @@ export class StarShip extends Component {
                                         <TableCell className={classes.tcell} align="right">{starship.crew}</TableCell>
                                         <TableCell className={classes.tcell} align="right">{starship.passengers}</TableCell>
                                         <TableCell className={classes.tcell} align="right">{starship.cost_in_credits}</TableCell>
-                                        <TableCell className={classes.tcell} align="right">{starship.created}</TableCell>
+                                        
                                         <TableCell className={classes.tcell} align="right">{starship.MGLT}</TableCell>
                                         <TableCell className={classes.tcell} align="right">{starship.hyperdrive_rating}</TableCell>
                                         <TableCell className={classes.tcell} align="right">{starship.cargo_capacity}</TableCell>
                                         <TableCell className={classes.tcell} align="right">{starship.manufacturer}</TableCell>
-                                        <TableCell className={classes.tcell} align="right"><Button>Know More</Button></TableCell>
+                                        
                                     </TableRow>
                                     ))
                                 )

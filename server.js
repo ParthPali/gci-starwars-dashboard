@@ -1,7 +1,6 @@
 const { ApolloServer, gql } = require('apollo-server-express');
 const express = require('express');
 const cors = require('cors');
-const { RESTDataSource } = require('apollo-datasource-rest');
 const fetch = require('node-fetch');
 
 

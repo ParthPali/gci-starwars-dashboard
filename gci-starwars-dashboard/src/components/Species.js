@@ -78,7 +78,7 @@ export class Species extends Component {
                             <TableCell className={classes.thead} align="right">Average Height</TableCell>
                             <TableCell className={classes.thead} align="right">Home World</TableCell>
                             <TableCell className={classes.thead} align="right">Language</TableCell>
-                            <TableCell className={classes.thead} align="right">More Details</TableCell>
+                            
                         </TableRow>
                     </TableHead>
 
@@ -98,7 +98,7 @@ export class Species extends Component {
                                         <TableCell className={classes.tcell} align="right">{species.average_height}</TableCell>
                                         <TableCell className={classes.tcell} align="right">{species.homeworldData.name}</TableCell>
                                         <TableCell className={classes.tcell} align="right">{species.language}</TableCell>
-                                        <TableCell className={classes.tcell} align="right"><Button>Know More</Button></TableCell>
+                                        
                                     </TableRow>
                                     ))
                                     )
