@@ -1,25 +1,17 @@
 import React, { Component } from 'react'
 import gql from 'graphql-tag';
-import { Query } from 'react-apollo';
-import { useQuery } from '@apollo/react-hooks';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import poster from './poster.jpg';
 import Person from './Person';
-import Film from './Film.js'
-import { Grid } from '@material-ui/core';
-import { useEffect } from 'react';
+import Film from './Film.js';
+import Planet from './Planet';
+import Vehicle from './Vehicle';
+import StarShip from './StarShip';
+import Species from './Species';
 import ApolloClient from 'apollo-boost';
 import { ApolloProvider } from 'react-apollo';
-import Card from '@material-ui/core/Card';
-import CardActionArea from '@material-ui/core/CardActionArea';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+import LinearProgress from '@material-ui/core/LinearProgress';
 
 const client = new ApolloClient({
     uri: 'http://localhost:4000/graphql',
@@ -38,6 +30,17 @@ const getPerson = (pageNo) =>{
                 skin_color
                 birth_year
                 eye_color
+                hair_color
+                mass
+                films{
+                    title
+                }
+                starships{
+                    name
+                }
+                vehicles{
+                    name
+                }
 
             }
         }
@@ -61,7 +64,9 @@ const getFilm = () =>{
                 title
                 director
                 release_date
-                created
+                created 
+                producer
+                
             }
         }
     }
@@ -82,6 +87,9 @@ const getPlanet = (pageNo) =>{
                 gravity
                 climate
                 created
+                diameter
+                surface_water
+                terrain
             }
         }
 
@@ -93,6 +101,88 @@ const getPlanet = (pageNo) =>{
     
 }
 
+const getVehicle = (pageNo) =>{
+    
+    const all  = gql`
+    query{
+        
+        getEveryVehicle(page: ${pageNo}){
+
+            results{
+                cargo_capacity
+                cost_in_credits
+                created
+                crew
+                model
+                name
+                passengers
+            }
+        }
+
+        
+    }
+    `;
+
+    return all;
+    
+}
+
+const getStarShip = (pageNo) =>{
+    
+    const all  = gql`
+    query{
+        
+        getEveryStarShip(page: ${pageNo}){
+
+            results{
+                cargo_capacity
+                cost_in_credits
+                created
+                crew
+                model
+                name
+                passengers
+                MGLT
+                hyperdrive_rating
+                manufacturer
+
+            }
+        }
+
+        
+    }
+    `;
+
+    return all;
+    
+}
+
+const getSpecies = (pageNo) =>{
+    
+    const all  = gql`
+    query{
+        
+        getEverySpecies(page: ${pageNo}){
+
+            results{
+                name
+                classification
+                average_height
+                homeworld
+                homeworldData{
+                    name
+                }
+                language
+            }
+        }
+
+        
+    }
+    `;
+
+    return all;
+    
+}
 
 export class Home extends Component {
 
@@ -101,48 +191,88 @@ export class Home extends Component {
         this.state = {          
             people: null,
             film: null,
-            planet: null,        
+            planet: null,
+            Vehicle: null,
+            StarShip: null,
+            Species: null,       
         }
     }
 
     QueryPeople = async pageNo =>{
         await client.query({
                     query: getPerson(pageNo)
+                        })
+                        .then(result => {
+                            const data = result.data   
+                            this.setState({
+                                people: data.getEveryPerson.results
                                 })
-                                .then(result => {
-                                    const data = result.data
                                     
-                                    this.setState({
-                                        people: data.getEveryPerson.results
-                                    })
-                                    
-                                });
+                        });
     }
 
     QueryFilm = async () =>{
         await client.query({
                     query: getFilm()
+                            })
+                            .then(result => {
+                                 const data = result.data
+                                this.setState({
+                                    film: data.getEveryFilm.results
                                 })
-                                .then(result => {
-                                    const data = result.data
-                                    this.setState({
-                                        film: data.getEveryFilm.results
-                                    })
-                                });
+                            });
     }
 
     QueryPlanet = async pageNo =>{
         await client.query({
                     query: getPlanet(pageNo)
+                            })
+                            .then(result => {
+                                const data = result.data  
+                                this.setState({
+                                    planet: data.getEveryPlanet.results
                                 })
-                                .then(result => {
-                                    const data = result.data
                                     
-                                    this.setState({
-                                        planet: data.getEveryPlanet.results
-                                    })
+                            });
+    }
+
+    QueryVehicle = async pageNo =>{
+        await client.query({
+                    query: getVehicle(pageNo)
+                            })
+                            .then(result => {
+                                const data = result.data  
+                                this.setState({
+                                    Vehicle: data.getEveryVehicle.results
+                                })
                                     
-                                });
+                            });
+    }
+
+    QueryStarShip = async pageNo =>{
+        await client.query({
+                    query: getStarShip(pageNo)
+                            })
+                            .then(result => {
+                                const data = result.data  
+                                this.setState({
+                                    StarShip: data.getEveryStarShip.results
+                                })
+                                    
+                            });
+    }
+
+    QuerySpecies = async pageNo =>{
+        await client.query({
+                    query: getSpecies(pageNo)
+                            })
+                            .then(result => {
+                                const data = result.data  
+                                this.setState({
+                                    Species: data.getEverySpecies.results
+                                })
+                                    
+                            });
     }
 
     async setData(point,pageNo){
@@ -152,56 +282,198 @@ export class Home extends Component {
         if(point == 'planet'){
             await this.QueryPlanet(pageNo);
         }
+        if(point == 'vehicle'){
+            await this.QueryVehicle(pageNo);
+        }
+        if(point == 'starship'){
+            await this.QueryStarShip(pageNo);
+        }
+        if(point == 'species'){
+            await this.QuerySpecies(pageNo);
+        }
     
         
     }
     async componentDidMount(){
-        this.setData('person',1);
-        this.setData('planet',1);
+        await this.setData('person',1);
+        await this.setData('planet',1);
+        await this.setData('vehicle',1);
+        await this.setData('starship',1);
+        await this.setData('species',1);
         await this.QueryFilm();
         
     }
     
     render() {
 
-        const number = [1,2,3,4,5,6,7,8,9];
         let { classes } = this.props;
 
         return (
-
-            
+        
             <div className={classes.home}>
+            
             <ApolloProvider client={client}>
-                <div className={classes.People}>
+
+
+                <div className={classes.people}>
+
+                    <h1 className={classes.title}>PLANETS</h1>
+
+                    {(() => {
+                            if(this.state.planet == null){
+                                return (
+                                    <div className={classes.loading}>
+                                        <LinearProgress />
+                                    </div>
+                                )
+                            }else{
+                                return(
+                                    
+                                <Planet planet={this.state.planet} />
+                            )}
+                    })()}
+                    
+                        <ul className={classes.list}>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('planet',1)}>1</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('planet',2)}>2</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('planet',3)}>3</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('planet',4)}>4</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('planet',5)}>5</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('planet',6)}>6</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('planet',7)}>7</Button></li>
+                        </ul>
+
+                </div>
+                
+                <div className={classes.people}>
 
                     <h1 className={classes.title}>CHARACTERS</h1>
-                    <Grid container>
-                        <Person people={this.state.people} />
-                        <ul>
-                            <li><Button onClick={() => this.setData('person',1)}>1</Button></li>
-                            <li><Button onClick={() => this.setData('person',2)}>2</Button></li>
-                            <li><Button onClick={() => this.setData('person',3)}>3</Button></li>
-                            <li><Button onClick={() => this.setData('person',4)}>4</Button></li>
-                            <li><Button onClick={() => this.setData('person',5)}>5</Button></li>
-                            <li><Button onClick={() => this.setData('person',6)}>6</Button></li>
-                            <li><Button onClick={() => this.setData('person',7)}>7</Button></li>
-                            <li><Button onClick={() => this.setData('person',8)}>8</Button></li>
-                            <li><Button onClick={() => this.setData('person',9)}>9</Button></li>
-                        </ul>
+                    {(() => {
+                            if(this.state.people == null){
+                                return (
+                                    <div className={classes.loading}>
+                                        <LinearProgress />
+                                    </div>
+                                )
+                            }else{
+                                return(
+                                <Person people={this.state.people} />
+                            )}
+                    })()}
                         
-                    </Grid>
+                        
+                        <ul className={classes.list}>
+                            <li className={classes.listitem}><Button className={classes.listButton} onClick={() => this.setData('person',1)}>1</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('person',2)}>2</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('person',3)}>3</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('person',4)}>4</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('person',5)}>5</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('person',6)}>6</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('person',7)}>7</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('person',8)}>8</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('person',9)}>9</Button></li>
+                        </ul>
 
                 </div>
 
                 <div className={classes.people}>
                     <h1 className={classes.title}>Films</h1>
+                    {(() => {
+                            if(this.state.film == null){
+                                return (
+                                    <div className={classes.loading}>
+                                        <LinearProgress />
+                                    </div>
+                                )
+                            }else{
+                                return(
+                                    <Film film={this.state.film} />
+                            )}
+                    })()}
+                        
+                </div>
 
-                    <Grid container>
-                        <Film film={this.state.film} />
-                    </Grid>
+
+                <div className={classes.people}>
+
+                    <h1 className={classes.title}>Vehicles</h1>
+                    {(() => {
+                            if(this.state.Vehicle == null){
+                                return (
+                                    <div className={classes.loading}>
+                                        <LinearProgress />
+                                    </div>
+                                )
+                            }else{
+                                return(
+                                    
+                                    <Vehicle vehicle={this.state.Vehicle} />
+                            )}
+                    })()}
+                        
+                        <ul className={classes.list}>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('vehicle',1)}>1</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('vehicle',2)}>2</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('vehicle',3)}>3</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('vehicle',4)}>4</Button></li>
+                        </ul>
+
+                </div>
+
+                <div className={classes.people}>
+
+                    <h1 className={classes.title}>StarShips</h1>
+                    {(() => {
+                            if(this.state.StarShip == null){
+                                return (
+                                    <div className={classes.loading}>
+                                        <LinearProgress />
+                                    </div>
+                                )
+                            }else{
+                                return(
+                                    
+                                    <StarShip starship={this.state.StarShip} />
+                            )}
+                    })()}
+                        
+                        <ul className={classes.list}>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('starship',1)}>1</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('starship',2)}>2</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('starship',3)}>3</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('starship',4)}>4</Button></li>
+                        </ul>
+
+                </div>
+
+                <div className={classes.people}>
+
+                    <h1 className={classes.title}>Species</h1>
+                    {(() => {
+                            if(this.state.Species == null){
+                                return (
+                                    <div className={classes.loading}>
+                                        <LinearProgress />
+                                    </div>
+                                )
+                            }else{
+                                return(
+                                    
+                                    <Species species={this.state.Species} />
+                            )}
+                    })()}
+                        
+                        <ul className={classes.list}>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('species',1)}>1</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('species',2)}>2</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('species',3)}>3</Button></li>
+                            <li className={classes.listitem}><Button onClick={() => this.setData('species',4)}>4</Button></li>
+                        </ul>
+
                 </div>
                 </ApolloProvider>
             </div>
+        
         )
     }
 }
@@ -214,17 +486,23 @@ const styles = theme=> ({
     
     poster:{
         width: '100%',
-        height: '300px'
+        height: '600px'
     },
     home:{
-        margin: '40px',
+        margin: '70px',
         paddingTop: '100px',
+    },
+    people:{
+        padding: '50px',
+    },
+    loading: {
+        textAlign: 'center'
     },
     title:{
         
         padding: '15px',
         color: '#FFE81F',
-        borderRadius: '10px',
+        
         backgroundColor: 'black',
         textAlign: 'center'
     },
@@ -236,6 +514,26 @@ const styles = theme=> ({
     name:{
 
         borderBottom: '2px white'
+    },
+    list:{
+        textAlign: 'center',
+        backgroundColor: 'white',
+        marginTop: '10px',
+
+        display: 'flex',
+        flexDirection: 'row',
+        padding: 10,
+    },
+    listitem:{
+        fontSize: '14px',
+        margin: '8px',
+        backgroundColor: '#F0F0F0',
+        border: '2px black',
+        listStyle: 'none'
+    },
+    listButton:{
+        
+        border: '2px black'
     }
 })
 

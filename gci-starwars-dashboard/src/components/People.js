@@ -7,6 +7,7 @@ export class People extends Component {
         return (
             <div>
                 <h1>People Page</h1>
+                
             </div>
         )
     }

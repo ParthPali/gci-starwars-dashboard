@@ -4,38 +4,12 @@ const cors = require('cors');
 const { RESTDataSource } = require('apollo-datasource-rest');
 const fetch = require('node-fetch');
 
-// This holds the functions we need to fetch data
-class RequestApi extends RESTDataSource{
-    constructor(){
-        super();
-        this.baseURL = 'https://swapi.co/api/';
-    }
-    
-    async getThing(url){
-        return this.get(url);
-    }
 
-    async getPerson(id){
-        return this.get(`people/${id}`);
-    }
-
-    async getFilm(id){
-        return this.get(`films/${id}`);
-        
-    }
-    async getPlanet(id){
-        return this.get(`planets/${id}`);
-    }
-    async getVehicle(id){
-        return this.get(`vehicles/${id}`);
-    }
-    async getStarShip(id){
-        return this.get(`starships/${id}`);
-    }
-
-    
+const getHomeWorld = async parent =>{
+    const response = await fetch(parent.homeworld);
+    const data = await response.json();
+    return data;
 }
-
 const getAllPerson = parent =>{
     const promises = parent.characters.map(async url =>{
         const response = await fetch(url);
@@ -137,6 +111,7 @@ const typeDefs = gql`
     type Film{
         title: String!
         director: String!
+        producer: String!
         characters: [Person]
         created: String!
         episode_id: Int!
@@ -152,58 +127,62 @@ const typeDefs = gql`
         name: String!
         birth_year: String
         gender: String
-        mass: Int
         eye_color: String
         skin_color: String
         films: [Film]
         starships: [StarShip]
         vehicles: [Vehicle]
+        hair_color: String
+        mass: String
     }
 
     type Planet{
         name: String!
         climate: String
         created: String
-        diameter: Int,
-        edited: String,
+        diameter: String
+        edited: String
         films: [Film]
         residents: [Person]
-        population: Int
+        population: String
         gravity: String
+        terrain: String
+        surface_water: String
     }
 
     type Vehicle{
-        cargo_capacity: Int
-        cost_in_credits: Int
+        cargo_capacity: String
+        cost_in_credits: String
         created: String
         crew: Int
         edited: String
         model: String
         name: String!
-        passengers: Int
+        passengers: String
         pilots: [Person]
         films: [Film]
     }
     type StarShip{
         MGLT: String
         cargo_capacity: String
-        cost_in_credits: Int
+        cost_in_credits: String
         created: String
-        crew: Int
+        crew: String
         edited: String
         hyperdrive_rating: String
         manufacturer: String
         model: String
         name: String
-        passengers: Int
+        passengers: String
         films: [Film]
         pilots: [Person]
     }
     type Species{
         name: String!
         classification: String
-        average_height: Int
-        homeworld: Planet
+        average_height: String
+        homeworld: String
+        homeworldData: Planet
         language: String
         people: [Person]
         films: [Film]
@@ -255,6 +234,7 @@ const resolvers = {
         residents: getAllPerson2
     },
     Species:{
+        homeworldData: getHomeWorld,
         films: getAllFilms,
         people: getAllPeople
     },
@@ -298,29 +278,10 @@ const resolvers = {
             return data;
         },
 
-        getFilm: async(_,{id}, {dataSources}) =>{
-            
-            return dataSources.requestApi.getFilm(id);
-        },
-        getPerson: async(_,{id}, {dataSources}) =>{
-            return dataSources.requestApi.getPerson(id);
-        },
-        getPlanet: async(_,{id}, {dataSources}) =>{
-            return dataSources.requestApi.getPlanet(id);
-        },
-        getVehicle: async(_,{id}, {dataSources}) =>{
-            return dataSources.requestApi.getVehicle(id);
-        },
-        getStarShip: async(_,{id}, {dataSources}) =>{
-            return dataSources.requestApi.getStarShip(id);
-        }
-
     }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers, dataSources: () => {
-    return { requestApi: new  RequestApi(), };
-}});
+const server = new ApolloServer({ typeDefs, resolvers,});
 
 const app = express();
 server.applyMiddleware({app});
