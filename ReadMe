@@ -1,0 +1,8 @@
+
+1) To run the project, use 'npm run dev' , it will run both the server.js file and the react project
+
+2) Tech used - Apollo Server, express, reactjs, graphql, Material UI
+
+3) The pagination takes atleast 5-8 seconds to fetch the other page,
+
+ 
